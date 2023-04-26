@@ -1,0 +1,5 @@
+全称Linux extended file system, extfs,即Linux扩展文件系统，ext2为第二代
+
+XFS一种高性能的日志文件系统，2000年5月，Silicon Graphics以GNU通用公共许可证发布这套系统的源代码，之后被移植到Linux 内核上。XFS 特别擅长处理大文件，同时提供平滑的数据传输
+
+UFS是UNIX文件系统的简称，它来源于4.3Tahoe发行版中提供的BSD Fat Fast File System（FFS）系统，属于FFS的演化版本
