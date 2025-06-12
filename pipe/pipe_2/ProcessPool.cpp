@@ -49,6 +49,7 @@ void Slaver()
 //初始化进程池
 void InitProcessPool(vector<channel>* channels)
 {
+    vector<int> oldfds;
     for (int i = 0; i < 10; ++i)
     {
         //创建管道
@@ -61,19 +62,22 @@ void InitProcessPool(vector<channel>* channels)
         //if (id < 0) return 1;//创建失败，返回-1
         if (id == 0)//子进程，关闭写端
         {
+            for (auto fd : oldfds) close(fd);//关闭子进程的写端
             // sleep(1);
-            close(pipefd[1]);
+            close(pipefd[1]);//只会关闭第一个子进程的写端，从第二个子进程开始写端没有关闭，会造成进程无法回收的情况
             //为了方便管道文件的获取，将 管道文件标识符 拷贝到 键盘文件标识符（0） 中
             dup2(pipefd[0], 0);
             close(pipefd[0]);
             Slaver();//子进程执行
+            exit(0);
         }
         //父进程，关闭读端
         close(pipefd[0]);
         //写入进程名字
         string name = "process-" + to_string(i);
         channels->push_back(channel(pipefd[1], id, name));
-        // sleep(1);
+        oldfds.push_back(pipefd[1]);
+        sleep(1);
     }
 }
 
@@ -121,11 +125,17 @@ void Debug(const vector<channel>& channels)
 
 void QuitProcess(const vector<channel>& channels)
 {
+    //
     for (const auto& c : channels)
     {
         close(c._cmdfd);
         waitpid(c._slaverid, nullptr, 0);
     }
+    // for (int i = channels.size(); i >= 0; ++i)
+    // {
+    //     close(channels[i]._cmdfd);
+    //     waitpid(channels[i]._slaverid, nullptr, 0);
+    // }
 }
 
 int main()

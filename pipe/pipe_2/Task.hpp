@@ -10,7 +10,6 @@ typedef void (*task_t)();
 void task1()
 {
     cout << "逐日：三尺台上释千古 一曲谱半生 影随光而行" << endl;
-    system("madplay C:/Users/Haope/Downloads/2skill1_1.mp3 &");
 }
 
 void task2()
