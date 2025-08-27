@@ -11,7 +11,7 @@ using namespace std;
 
 extern Log log;
 
-void Usage(string proc)
+static void Usage(string proc)
 {
     cout << "\n\rUsage: " << proc << " serverip serverport\n" << endl;
 }
